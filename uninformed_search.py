@@ -1,18 +1,4 @@
 """
-ADDIS ABABA UNIVERSITY
-COLLEGE OF TECHNOLOGY & BUILT ENVIRONMENT
-SCHOOL OF INFORMATION TECHNOLOGY & ENGINEERING 
-
-Assignment One: Implementation of Search Algorithms
-Topic: BFS, DFS, and Uniform Cost Search (UCS)
-Submission Date: May 14, 2026
-
-Group Members:
-1. Bisrat Amare    UGR/0017/16
-2. Aster Regasa    UGR/4653/16
-3. Mulu Girmay     UGR/3636/16
-4. Feyistu Endale  UGR/5874/16
-
 --- GRAPH REPRESENTATION ---
 Nodes (States): 10 Ethiopian Cities
 Edges (Actions): Road connections between cities
@@ -54,7 +40,7 @@ def breadth_first_search(graph, start, goal):
 
     while queue:
         node = queue.popleft()
-        expansion_order.append(node)
+        expansion_order.append(node)  # record the popped node
         
         if node == goal:
             return reconstruct_path(visited, start, goal), expansion_order
@@ -94,6 +80,7 @@ def uniform_cost_search(graph, start, goal):
     pq = [(0, start, None)]
     visited_costs = {} 
     parent_map = {}
+    expansion_order = []
 
     while pq:
         cost, node, parent = heapq.heappop(pq)
@@ -101,16 +88,17 @@ def uniform_cost_search(graph, start, goal):
         if node in visited_costs and visited_costs[node] <= cost:
             continue
         
+        expansion_order.append(node) 
         visited_costs[node] = cost
         parent_map[node] = parent
 
         if node == goal:
-            return reconstruct_path(parent_map, start, goal), cost
+            return reconstruct_path(parent_map, start, goal), cost, expansion_order 
 
         for neighbor, weight in graph.get(node, []):
             heapq.heappush(pq, (cost + weight, neighbor, node))
             
-    return None, 0
+    return None, 0, expansion_order
 
 # 5. EXECUTION
 start_node = 'Addis Ababa'
@@ -119,12 +107,18 @@ goal_node = 'Lalibela'
 # Run algorithms
 path_bfs, expand_bfs = breadth_first_search(graph, start_node, goal_node)
 path_dfs, expand_dfs = depth_first_search(graph, start_node, goal_node)
-path_ucs, total_cost = uniform_cost_search(graph, start_node, goal_node)
+path_ucs, total_cost, expand_ucs = uniform_cost_search(graph, start_node, goal_node) # Modified to unpack 3 values
 
 # Print Results
+print("="*50)
+print(f"INFORMED SEARCH: {start_node} to {goal_node}")
+print("="*50)
+
 print(f"1. BFS Path: {' -> '.join(path_bfs)}")
 print(f"   Expansion Order: {expand_bfs}\n")
 print(f"2. DFS Path: {' -> '.join(path_dfs)}")
 print(f"   Expansion Order: {expand_dfs}\n")
 print(f"3. UCS Optimal Path: {' -> '.join(path_ucs)}")
+print(f"   Expansion Order: {expand_ucs}")
 print(f"   Total Path Cost: {total_cost} km")
+print("="*50)
