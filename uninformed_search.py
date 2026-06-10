@@ -107,7 +107,7 @@ goal_node = 'Lalibela'
 # Run algorithms
 path_bfs, expand_bfs = breadth_first_search(graph, start_node, goal_node)
 path_dfs, expand_dfs = depth_first_search(graph, start_node, goal_node)
-path_ucs, total_cost, expand_ucs = uniform_cost_search(graph, start_node, goal_node) # Modified to unpack 3 values
+path_ucs, total_cost, expand_ucs = uniform_cost_search(graph, start_node, goal_node)
 
 # Print Results
 print("="*50)
